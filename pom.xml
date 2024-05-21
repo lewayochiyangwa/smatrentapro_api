@@ -8,13 +8,13 @@
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.brokeroffice</groupId>
+	<groupId>com.smatpro</groupId>
 	<artifactId>SmatRentalPro_API</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springboot-ws</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<start-class>com.smatpro.api.SmatRentalPro</start-class>
 	</properties>
 
@@ -71,11 +71,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+
+
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto -->
 		<dependency>
@@ -98,11 +102,6 @@
 			<version>2.1</version>
 		</dependency>
 
-		<!--<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>-->
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -110,13 +109,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-
-
-		<dependency>
-			<groupId>com.rabbitmq</groupId>
-			<artifactId>amqp-client</artifactId>
-			<version>5.15.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
@@ -131,17 +123,6 @@
 			<version>4.1.2</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>core</artifactId>
-			<version>3.4.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>javase</artifactId>
-			<version>3.4.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>zw.co.paynow</groupId>
@@ -149,11 +130,7 @@
 			<version>1.1.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mashape.unirest</groupId>
-			<artifactId>unirest-java</artifactId>
-			<version>1.4.9</version>
-		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
@@ -162,25 +139,6 @@
 			<version>2.9.0</version>
 		</dependency>
 
-
-		<!--<dependency>
-			<groupId>jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>2.0.5</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>com.generikssolutions</groupId>
-			<artifactId>jasperreports-4.0.0</artifactId>
-			<version>4.0.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.generikssolutions</groupId>
-			<artifactId>itext-2.1.7</artifactId>
-			<version>2.1.7</version>
-		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
@@ -219,7 +177,7 @@
 			<version>2.1.0</version>
 		</dependency>
 
-		<!--	Tutor Trial -->
+		<!--
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -230,7 +188,7 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>3.0.0</version>
-		</dependency>
+		</dependency>  -->
 
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -257,42 +215,6 @@
 	<build>
 		<finalName>datvest_portal_api</finalName>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<executable>true</executable>
-				</configuration>
-			</plugin>-->
-			<!--<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>com.smatpro.api.SmatRentalPro</mainClass>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
-
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<archive>
-						<index>true</index>
-						<manifest>
-							<mainClass>com.smatpro.api.SmatRentalPro</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>-->
-
 
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

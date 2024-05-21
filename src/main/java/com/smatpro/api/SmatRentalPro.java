@@ -9,11 +9,15 @@ import com.google.common.collect.ImmutableList;
 
 import com.smatpro.api.Auth.AuthenticationService;
 import com.smatpro.api.Auth.RegisterRequest;
+import com.smatpro.api.Helpers.Hasher;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,11 +25,14 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static com.google.common.base.Predicates.or;
+import static com.smatpro.api.Helpers.Hasher.decrypt;
 import static com.smatpro.api.Users.Role.ADMIN;
 import static com.smatpro.api.Users.Role.MANAGER;
 //import static springfox.documentation.builders.PathSelectors.regex;
@@ -33,11 +40,13 @@ import static com.smatpro.api.Users.Role.MANAGER;
 
 //@SpringBootApplication
 //@EnableScheduling
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+//@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @EnableSwagger2WebMvc
 //@EnableSwagger2
 
-//@SpringBootApplication
+@SpringBootApplication
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableWebSecurity
 public class SmatRentalPro {
 
 	 ReentrantLock lock = new ReentrantLock();
@@ -55,6 +64,16 @@ public class SmatRentalPro {
 	public static void main(String[] args) throws Exception{
 
 		SpringApplication.run(SmatRentalPro.class, args);
+
+	String plainText = "76F+3mVJYhb/pEqjYdZxdQHqG78J/OdwBcwwiUO12w1Ey5Y4Oz8C3gwB+FK+6idQCyRHUAatzZJIkCBs+/Mkie9jLho79OHomS6YKYKl+YtoDu0Qau4E3qtJKJ5r3HzjhaAn0cXm1apRLWO1k8JqS8suuGOV6RkBl0I1GwjJHPA3ZGRHF/ix9S3Sz5d3AQkhgLxIZbtduU7tiicjo5qyHg==";
+		System.out.println("Plain Text Before Encryption: " + plainText);
+
+		SecretKey key = new SecretKeySpec("0123456789abcdef".getBytes(), "AES");
+	//	String encryptedText = Hasher.encrypt(plainText, key);
+	//	System.out.println("Encrypted Text After Encryption: " + encryptedText);
+
+		String decryptedText = decrypt(plainText, key);
+		System.out.println("Decrypted Text After Decryption: " + decryptedText);
 
 
 	}
@@ -155,6 +174,8 @@ public class SmatRentalPro {
 		};
 	}
 	*/
+
+
 
 }
 
