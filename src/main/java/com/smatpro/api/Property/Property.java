@@ -21,5 +21,7 @@ public class Property {
     public long id;
     public String name;
     public String address;
+    public String description1;
+    public double amount;
 
 }

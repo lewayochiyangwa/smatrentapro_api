@@ -5,8 +5,10 @@ package com.smatpro.api.Auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.smatpro.api.Config.JwtService;
+import com.smatpro.api.Helpers.ApiResponse;
 import com.smatpro.api.Helpers.Dao;
 import com.smatpro.api.Helpers.Hasher;
+import com.smatpro.api.Helpers.LoginReturner;
 import com.smatpro.api.Token.Token;
 import com.smatpro.api.Token.TokenRepository;
 import com.smatpro.api.Token.TokenType;
@@ -68,7 +70,7 @@ public class AuthenticationService {
 
 
     String activationLink="http://localhost:8081/api/v1/auth/activate?v="+ Hasher.encrypt(jwtToken, key);
-    gmailMaster("lewayo.chiyangwa@gmail.com","Registration",activationLink);
+    gmailMaster(request.getEmail(),"Registration",activationLink);
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
@@ -141,7 +143,8 @@ public class AuthenticationService {
       return false;
     }
   }
-  public AuthenticationResponse authenticate(AuthenticationRequest request) {
+ // public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public ApiResponse authenticate(AuthenticationRequest request) {
     if(checkIfActivated(request.getEmail())) {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -155,15 +158,22 @@ public class AuthenticationService {
       var refreshToken = jwtService.generateRefreshToken(user);
       revokeAllUserTokens(user);
       saveUserToken(user, jwtToken);
-      return AuthenticationResponse.builder()
+      /*return AuthenticationResponse.builder()
               .accessToken(jwtToken)
               .refreshToken(refreshToken)
-              .build();
+              .build();*/
+      return new ApiResponse("Success",
+              200,"",
+              new LoginReturner(request.getEmail(),jwtToken,refreshToken));
     }else{
-      return AuthenticationResponse.builder()
+
+      /*return AuthenticationResponse.builder()
               .accessToken("Not Activated")
               .refreshToken("Not Activated")
-              .build();
+              .build();*/
+      return new ApiResponse("Success",
+              200,"",
+              new LoginReturner(request.getEmail(),"Not Activated","Not Activated"));
     }
   }
 

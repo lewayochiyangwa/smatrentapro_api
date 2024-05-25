@@ -1,6 +1,7 @@
 package com.smatpro.api.Auth;
 
 
+import com.smatpro.api.Helpers.ApiResponse;
 import com.smatpro.api.Helpers.Dao;
 import com.smatpro.api.Helpers.Hasher;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +38,12 @@ public class AuthenticationController {
     return ResponseEntity.ok(service.register(request));
   }
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
+ // public ResponseEntity<AuthenticationResponse> authenticate(
+  public ApiResponse authenticate(
       @RequestBody AuthenticationRequest request
   ) {
-    return ResponseEntity.ok(service.authenticate(request));
+   // return ResponseEntity.ok(service.authenticate(request));
+      return service.authenticate(request);
   }
 
   @PostMapping("/refresh-token")

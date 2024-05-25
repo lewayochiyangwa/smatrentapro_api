@@ -2,27 +2,26 @@ package com.smatpro.api.uploads;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smatpro.api.Helpers.Dao;
+import com.smatpro.api.Helpers.IdEmail;
+import com.smatpro.api.Property.Property;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class FileUploadController {
@@ -47,21 +46,24 @@ public class FileUploadController {
             }
 
             // Save file to disk
-            String filename = StringUtils.cleanPath(file.getOriginalFilename());
+            String filename = StringUtils.cleanPath(file.getOriginalFilename().toLowerCase());
             log.info("check file exte");
             log.info(filename);
-            if (!filename.endsWith(".PNG") && !filename.endsWith(".jpg")) {
+            if (!filename.endsWith(".png") && !filename.endsWith(".jpg")) {
                 return ResponseEntity.badRequest().body("Invalid file format, only PNG files are allowed");
             }
-            Path path = Paths.get("\\assets\\img\\pop\\" + filename);
+            Path path = Paths.get("C:\\xampp\\htdocs\\houses\\assets\\pro_pics\\" + filename);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
+            int theId= IdEmail.getIdByEmail(request.getID());
+
+
             try {
-                String sql = "UPDATE tblpics SET ProofOfPayment = ? WHERE id ="+request.getID();
+                String sql = "UPDATE profile_pic SET image_path = ? WHERE user_id ="+theId;
                 //log.info(sql);
                 PreparedStatement stmt = Dao.connection().prepareStatement(sql);
-                log.info("assets/img/pop/"+request.getFileName());
-                stmt.setString(1, "assets/img/pop/"+filename);
+                log.info("assets/pro_pics/"+request.getFileName());
+                stmt.setString(1, "assets/pro_pics/"+filename);
                 int rowsUpdated = stmt.executeUpdate();
                 if (rowsUpdated > 0) {
                     System.out.println("User data was updated successfully!");
@@ -87,4 +89,30 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PostMapping("/profilepic")
+    public String cc(@RequestBody @Valid PostEmail postEmail) {
+        String imagePath = "";
+        String sql = "SELECT image_path FROM profile_pic WHERE user_id = ?";
+        try (Connection connection = Dao.connection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            int theId= IdEmail.getIdByEmail(postEmail.getEmail());
+            statement.setInt(1, theId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                     imagePath = resultSet.getString("image_path");
+                    // Process the image path as needed
+                    System.out.println("Image Path: " + imagePath);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving image path", e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // Return the appropriate response
+        return imagePath;
+    }
+
 }
